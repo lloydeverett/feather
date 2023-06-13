@@ -59,7 +59,7 @@
     // update positions
     featherY += featherVelocity * elapsed;
     rectangleY += rectangleVelocity * elapsed;
-    featherY = Math.min(featherY, (rectangleHeight / 2) + (containerHeight / 2))
+    featherY = Math.min(featherY, (featherHeight / 2) + (containerHeight / 2))
 
     // update feather rotation
     featherRotateDeg = Math.sin(totalElapsed * 0.002) * 8;
