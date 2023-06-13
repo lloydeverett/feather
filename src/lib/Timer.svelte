@@ -67,7 +67,7 @@
  
 <div>
   <div class="timer-stuff">
-    <input style="display: {started ? 'none' : 'block'}; border: none; {(isNaN(parseSeconds(durationStr)) && durationStr) ? 'border-bottom: 1px solid red;' : ''}" id="duration" bind:value={durationStr} />
+    <input style="display: {started ? 'none' : 'block'}; border: none; {(durationStr && isNaN(parseSeconds(durationStr))) ? 'border-bottom: 1px solid red;' : ''}" id="duration" bind:value={durationStr} />
     <span style="display: {started ? 'block' : 'none'};">{timeLeft} seconds</span>
     <button on:click={startTimer} style="display: {started ? 'none' : 'block'};">Start</button>
     <button on:click={stopTimer} style="display: {started ? 'block' : 'none'};">Stop</button>
