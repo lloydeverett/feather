@@ -1,12 +1,14 @@
 <script>
   import { onDestroy } from 'svelte';
  
+  const COMPLETED_TIMERS_LOCAL_STORAGE_KEY = "completedTimers";
+
   let started = false;
   let durationStr;
   let timeLeft;
   let intervalId;
   
-  let completedTimers = 0;
+  let completedTimers = parseInt(localStorage.getItem(COMPLETED_TIMERS_LOCAL_STORAGE_KEY) ?? "0");
   const minDots = 3;
  
   function parseSeconds(str) {
@@ -39,12 +41,18 @@
     started = true;
     intervalId = setInterval(() => {
       timeLeft--;
-      if (timeLeft === 0) {
+      if (timeLeft <= 0) {
         started = false
         completedTimers++;
+        localStorage.setItem(COMPLETED_TIMERS_LOCAL_STORAGE_KEY, "" + completedTimers);
         clearInterval(intervalId);
       }
     }, 1000);
+  }
+
+  function resetCompletedTimers() {
+    completedTimers = 0;
+    localStorage.setItem(COMPLETED_TIMERS_LOCAL_STORAGE_KEY, "0");
   }
  
   function stopTimer() {
@@ -64,10 +72,11 @@
     <button on:click={startTimer} style="display: {started ? 'none' : 'block'};">Start</button>
     <button on:click={stopTimer} style="display: {started ? 'block' : 'none'};">Stop</button>
   </div>
-  <div>
+  <div class="dot-stuff">
     {#each [...Array(Math.max(completedTimers, minDots)).keys() /* range: 1,2,...,max(completedTimers, minDots) */] as index}
       <span class="dot {index < completedTimers ? 'dot-filled' : ''}"></span>
     {/each}
+    <button on:click={resetCompletedTimers} style="display: {completedTimers === 0 ? 'none' : 'block'};">Reset</button>
   </div>
  </div>
  
@@ -85,6 +94,19 @@
     margin-bottom: 20px;
   }
  
+  .dot-stuff {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dot-stuff > button {
+    padding: 0;
+    margin-left: 10px;
+    background: none;
+  }
+
   span {
     display: block;
     margin-right: 10px;
